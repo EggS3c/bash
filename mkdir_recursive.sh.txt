@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Function to create directories recursively with a maximum depth
+create_directory_structure() {
+    local current_dir="$1"
+    local depth="$2"
+    shift 2
+
+    if [ "$depth" -le 0 ]; then
+        return
+    fi
+
+    for dir_name; do
+        local new_dir="$current_dir/$dir_name"
+        mkdir -p "$new_dir"
+        echo "Created directory: $new_dir"
+        create_directory_structure "$new_dir" "$((depth - 1))" "${@}"
+    done
+}
+
+# Prompt the user for a directory name
+echo "Please enter the top-level directory name:"
+read top_level_directory
+
+# Create the top-level directory
+mkdir -p "$top_level_directory"
+
+# Check if the top-level directory was created successfully
+if [ -d "$top_level_directory" ]; then
+    echo "Top-level directory '$top_level_directory' created successfully."
+
+    # Prompt the user for file names
+    echo "Enter the names of the files you want to create in '$top_level_directory' (separated by spaces):"
+    read -a file_names
+
+    # Create the specified files in the top-level directory
+    for file in "${file_names[@]}"; do
+        touch "$top_level_directory/$file"
+        echo "File '$file' created in '$top_level_directory'."
+    done
+
+    # Prompt the user for subdirectories
+    echo "Enter the names of subdirectories you want to create within '$top_level_directory' (separated by spaces):"
+    read -a subdirectories
+
+    # Set the maximum depth for subdirectories
+    max_depth=3  # Change this to your desired maximum depth
+
+    # Create the specified subdirectories recursively with the maximum depth
+    create_directory_structure "$top_level_directory" "$max_depth" "${subdirectories[@]}"
+else
+    echo "Failed to create top-level directory '$top_level_directory'."
+fi
