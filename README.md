@@ -8,7 +8,7 @@ This Bash script allows you to create a directory structure with nested subdirec
 1. Clone or download this script to your local machine.
 
 2. Make the script executable, if needed:
-   chmod +x mkdir_recursive.sh
+   chmod +x mkdir_recursive.sh  #please delete (the .txt file extention) 
 Run the script:
 
 
